@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 
 class ExercisesOverviewList extends Component {
     checkExeType(type){
-        console.log('exe-type',type);
         switch(type){
             case 'PART_OF_SPEECH': return 'OrdKlassar';
             default:return undefined;
@@ -14,12 +13,10 @@ class ExercisesOverviewList extends Component {
         return Object
             .keys(this.props.exercises)
             .map(key => {
-                console.log('mapped',key);
                 let exercise = this.props.exercises[key];
-                console.log(exercise);
                 return (
                     <tr key={key}>
-                        <td>{this.checkExeType(exercise.exerciseType.toString())}</td>
+                        <td>{this.checkExeType(exercise.exerciseType)}</td>
                         <td>
                             -
                         </td>
