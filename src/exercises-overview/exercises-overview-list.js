@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import {connect} from 'react-redux';
+import {deleteOneExercise} from '../actions/deleteOneExercise';
 
 class ExercisesOverviewList extends Component {
     checkExeType(type){
@@ -9,13 +11,18 @@ class ExercisesOverviewList extends Component {
         }
     }
 
+    onDeleteButton=(key)=>{
+        console.log('the key to delete',key)
+        this.props.deleteOneExercise(key);
+    }
+
     renderExercises() {
         return Object
             .keys(this.props.exercises)
-            .map(key => {
-                let exercise = this.props.exercises[key];
+            .map(theKey => {
+                let exercise = this.props.exercises[theKey];
                 return (
-                    <tr key={key}>
+                    <tr key={theKey}>
                         <td>{this.checkExeType(exercise.exerciseType)}</td>
                         <td>
                             -
@@ -26,12 +33,12 @@ class ExercisesOverviewList extends Component {
                         <td>{exercise.rightAnswersNumber + exercise.wrongAnswersNumber}</td>
                         <td>0 %</td>
                         <td>
-                            <Link to="#">
+                            <Link to={`ny-uppgift/${theKey}/true`}>
                                 <button type="button" className="btn btn-primary">
                                     <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </button>
                             </Link>
-                            <button type="button" className="btn btn-danger">
+                            <button type="button" className="btn btn-danger" onClick={this.onDeleteButton.bind(this,theKey)}>
                                 <span className="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             </button>
                         </td>
@@ -66,4 +73,16 @@ class ExercisesOverviewList extends Component {
     }
 }
 
-export default ExercisesOverviewList;
+
+//introduce new props to this component
+function mapStateToProps(state) {
+    return {exercises: state.exercises}
+}
+//as we intoduce new props, lets document it in proptypes
+ExercisesOverviewList.propTypes = {
+    exercises: React.PropTypes.object.isRequired,
+    deleteOneExercise: React.PropTypes.func.isRequired
+}
+
+
+export default connect(mapStateToProps,{deleteOneExercise})(ExercisesOverviewList);

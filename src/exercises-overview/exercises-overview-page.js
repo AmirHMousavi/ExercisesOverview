@@ -6,9 +6,7 @@ import {fetchAllExercises} from '../actions/fetchAllExercises';
 
 class exercisesOverviewPage extends Component {
     componentDidMount() {
-        this
-            .props
-            .fetchAllExercises();
+        this.props.fetchAllExercises();
     }
 
     render() {
@@ -28,17 +26,17 @@ class exercisesOverviewPage extends Component {
                             </div>
                         </div>
                         <div className="col-sm-1 col-sm-offset-6">
-<div className="dropdown">
-  <button className="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-    Ny Ordklassar
-    <span className="caret" style={{margin:5+'px'}}></span>
-  </button>
-  <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-    <li><Link to="ny-uppgift">Ny Ordklassar</Link></li>
-    <li className="disabled"><a href="#">another type1</a></li>
-    <li className="disabled"><a href="#">another type 2</a></li>
-  </ul>
-</div>
+                            <div className="dropdown">
+                            <button className="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                Ny Ordklassar
+                                <span className="caret" style={{margin:5+'px'}}></span>
+                            </button>
+                            <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><Link to="ny-uppgift/-1/false">Ny Ordklassar</Link></li>
+                                <li className="disabled"><a href="#">another type1</a></li>
+                                <li className="disabled"><a href="#">another type 2</a></li>
+                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
