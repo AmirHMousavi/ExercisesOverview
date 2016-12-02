@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import Validator from 'validator';
 import _ from 'lodash';
 
+
+/*
 function validateInput(data) { 
     let errors = {};
     if (Validator.isEmpty(data.sentence)) {
@@ -15,7 +16,7 @@ function validateInput(data) {
     }
     return {errors, isValid: _.isEmpty(errors)}
 }
-//*********************************************
+//*********************************************/
 
 class SentenceForm extends Component {
     constructor(props){
@@ -30,14 +31,22 @@ class SentenceForm extends Component {
     }
     render() {
         return (
-            <div>
+            <div className="col-xs-12">
+            <div className="col-xs-10">
                 <input
                     className="form-control"
                     name="sentence"
                     placeholder="mening"
                     type="text"
                     value={this.state.sentence}
-                    onChange={this.onChange}/>
+                    onChange={this.onChange}/> 
+            </div>
+            <div className="col-xs-2">
+                <button type="button" className="btn btn-info">
+                <span className="glyphicon glyphicon-arrow-down"></span></button>
+                
+            </div>
+
             </div>
         );
     }

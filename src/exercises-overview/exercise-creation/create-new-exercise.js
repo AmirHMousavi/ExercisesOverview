@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import lgaCategories from './lga-categories';
+import Categories from './categories';
 import SentenceForm from './sentence-form';
 
 class createNewExercisePage extends Component {
@@ -46,7 +46,7 @@ class createNewExercisePage extends Component {
                     <form>
                         <SentenceForm/>
                         <h3>Alternativ</h3>
-                        <lgaCategories/>
+                        <Categories/>
                         <div className="row">
                             <div className="col-xs-2">
                                 {this.props.params.editMode === "true"

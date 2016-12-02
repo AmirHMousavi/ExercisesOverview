@@ -48,6 +48,11 @@ class ExercisesOverviewList extends Component {
     }
 
     render() {
+        if(!this.props.exercises){
+            return<div>
+                <h2>Loading...</h2>
+            </div>
+        }
         return (
             <div>
                 <table className="table table-hover table-bordered">
