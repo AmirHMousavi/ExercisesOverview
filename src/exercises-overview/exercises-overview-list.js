@@ -23,6 +23,7 @@ class ExercisesOverviewList extends Component {
                 let exercise = this.props.exercises[theKey];
                 return (
                     <tr key={theKey}>
+                        <td>{exercise.id}</td>
                         <td>{this.checkExeType(exercise.exerciseType)}</td>
                         <td>
                             -
@@ -48,16 +49,12 @@ class ExercisesOverviewList extends Component {
     }
 
     render() {
-        if(!this.props.exercises){
-            return<div>
-                <h2>Loading...</h2>
-            </div>
-        }
         return (
             <div>
                 <table className="table table-hover table-bordered">
                     <thead>
                         <tr>
+                            <th>#</th>
                             <th>Typ</th>
                             <th>Svårighet</th>
                             <th>Mening</th>

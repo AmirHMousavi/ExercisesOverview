@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {FETCH_CATEGORIES} from './types';
+import {FETCH_SOLUTION_GROUPS} from './types';
 
-export function setAllSolutionGroups(categories){
+export function setAllSolutionGroups(solutionGroups){
     return{
-        type:FETCH_CATEGORIES,
-        categories
+        type:FETCH_SOLUTION_GROUPS,
+        solutionGroups
     }
 }
 

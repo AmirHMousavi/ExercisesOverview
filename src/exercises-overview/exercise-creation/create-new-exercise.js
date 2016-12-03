@@ -7,9 +7,6 @@ import SentenceForm from './sentence-form';
 class createNewExercisePage extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            exercise: {}
-        }
         this.onClick = this
             .editExerciseAndBack
             .bind(this);
@@ -47,6 +44,9 @@ class createNewExercisePage extends Component {
                         <SentenceForm/>
                         <h3>Alternativ</h3>
                         <Categories/>
+                        <div>
+                            <h2>...........</h2>
+                        </div>
                         <div className="row">
                             <div className="col-xs-2">
                                 {this.props.params.editMode === "true"
