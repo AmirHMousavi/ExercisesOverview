@@ -1,3 +1,12 @@
+### Runing Project
+* `server should run on localhost:8080`
+* `if server port is different modify proxy section in packaje.json`
+```
+$ git clone  https://github.com/AmirHMousavi/ExercisesOverview.git
+$ cd ExercisesOverview
+$ npm install
+$ npm start
+```
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
