@@ -41,20 +41,16 @@ class exercisesOverviewPage extends Component {
                     </div>
                 </div>
                 <hr/>
-                <ExercisesOverviewList exercises={this.props.exercises}/>
+                <ExercisesOverviewList/>
             </div>
         );
     }
 }
 
-//introduce new props to this component
-function mapStateToProps(state) {
-    return {exercises: state.exercises}
-}
+
 //as we intoduce new props, lets document it in proptypes
 exercisesOverviewPage.propTypes = {
-    exercises: React.PropTypes.object.isRequired,
     fetchAllExercises: React.PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps, {fetchAllExercises})(exercisesOverviewPage);
+export default connect(null,{fetchAllExercises})(exercisesOverviewPage);

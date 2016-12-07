@@ -1,20 +1,26 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router';
+import React, {Component,PropTypes} from 'react';
 import _ from 'lodash';
-import Categories from './categories';
-import SentenceForm from './sentence-form';
+import {connect} from 'react-redux';
+import Alternativ from './alternativ';
+import Mening from './mening';
+import {fetchOneExercise} from '../../actions/fetchOneExercise';
 
 class createNewExercisePage extends Component {
+
+    componentDidMount(){
+        this.props.fetchOneExercise(this.props.params.id);
+    }
     constructor(props) {
         super(props);
-        this.onClick = this
-            .editExerciseAndBack
-            .bind(this);
+        this.editExerciseAndBack = this.editExerciseAndBack.bind(this);
+        this.goBack=this.goBack.bind(this);
     }
     editExerciseAndBack() {}
     saveAndNewExercise() {}
+    goBack(){this.setState({currentExercise:{}});this.context.router.push("/exercises-overview")}
 
     render() {
+        let{editMode}=this.props.params;
         const editButton = (
             <button type="button" className="btn btn-success"
                 onClick={this.editExerciseAndBack}>Uppdatera & Tillbaka
@@ -30,30 +36,17 @@ class createNewExercisePage extends Component {
                 <h1>Redigera Ordklasser</h1>
                 <hr/>
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-xs-1">
-                            <h3 style={{margin: 5 + 'px'}}>Mening</h3>
-                        </div>
-                        <div className="col-xs-1 col-xs-offset-1">
-                            <button type="button" className="btn btn-primary">
-                                <span className="glyphicon glyphicon-pencil"></span>
-                            </button>
-                        </div>
-                    </div>
                     <form>
-                        <SentenceForm/>
-                        <h3>Alternativ</h3>
-                        <Categories/>
-                        <div>
-                            <h2>...........</h2>
-                        </div>
+                        <Mening/>
+                        <Alternativ/>
+                        <br/>
                         <div className="row">
                             <div className="col-xs-2">
-                                {this.props.params.editMode === "true"
+                                {editMode === "true"
                                     ? editButton
                                     : newButton}</div>
                             <div className="col-xs-2">
-                                <Link to="exercises-overview" type="button" className="btn btn-danger">Avbryt</Link>
+                                <button onClick={this.goBack} type="button" className="btn btn-danger">Avbryt</button>
                             </div>
                         </div>
                     </form>
@@ -63,4 +56,17 @@ class createNewExercisePage extends Component {
     }
 }
 
-export default createNewExercisePage;
+function mapStateToProps(state){
+    return{
+        currentExercise:state.currentExercise
+    }
+}
+createNewExercisePage.propTypes={
+    fetchOneExercise:PropTypes.func.isRequired,
+    currentExercise:PropTypes.object.isRequired
+}
+createNewExercisePage.contextTypes = {
+    router: PropTypes.object
+}
+
+export default connect(mapStateToProps,{fetchOneExercise})(createNewExercisePage);

@@ -12,15 +12,23 @@ class ExercisesOverviewList extends Component {
     }
 
     onDeleteButton=(key)=>{
-        console.log('the key to delete',key)
         this.props.deleteOneExercise(key);
     }
+    sliceTheSentence(sentence,index) {
+        var splitedSentece = sentence.split(" ");
+        var slice1=splitedSentece.slice(0,index);
+        var slice2=splitedSentece.slice(index,index+1);
+        var slice3=splitedSentece.slice(index+1,splitedSentece.length);
+        return [slice1.join(" "),slice2.join(" "),slice3.join(" ")];    
+}
 
     renderExercises() {
         return Object
             .keys(this.props.exercises)
             .map(theKey => {
                 let exercise = this.props.exercises[theKey];
+                let boldWordIndex=exercise.solutionGroups[0].groupParts[0].selectedWordIndex;
+                let slicedSentence=this.sliceTheSentence(exercise.sentence,boldWordIndex);
                 return (
                     <tr key={theKey}>
                         <td>{exercise.id}</td>
@@ -28,7 +36,7 @@ class ExercisesOverviewList extends Component {
                         <td>
                             -
                         </td>
-                        <td>{exercise.sentence}</td>
+                        <td>{slicedSentence[0]}<b>&nbsp;{slicedSentence[1]}</b>&nbsp;{slicedSentence[2]}</td>
                         <td>{exercise.rightAnswersNumber}</td>
                         <td>{exercise.wrongAnswersNumber}</td>
                         <td>{exercise.rightAnswersNumber + exercise.wrongAnswersNumber}</td>

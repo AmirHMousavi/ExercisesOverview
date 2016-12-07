@@ -6,18 +6,15 @@ export default function exercises(state = {}, action) {
     switch (action.type) {
         case FETCH_ALL_EXERCISES:
             const exercises = _.mapKeys(action.exercises, 'id');
-            return {
-                ...state,
-                ...exercises
-            };
+            return {...state,...exercises};
         case DELETE_EXERCISE:
             return _.omit(state, action.exercises.id);
-
-            /*      case FETCH_EXERCISE:
-        return {...sate, [action.exercises.id]:action.exercises};
-        case UPDATE_EXERCISE:
-        return {...state,[action.exercises.id]:action.exercises};  */
         default:
             return state;
     }
 }
+
+ /*     case FETCH_EXERCISE:
+        return {...sate, [action.exercises.id]:action.exercises};
+        case UPDATE_EXERCISE:
+        return {...state,[action.exercises.id]:action.exercises};  */
