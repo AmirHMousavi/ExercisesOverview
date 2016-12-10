@@ -20,7 +20,7 @@ ReactDOM.render(
     <Route path="/" component={App}>
     <IndexRoute component={Greeting}/>
     <Route path="exercises-overview" component={exercisesOverviewPage}/>
-    <Route path="ny-uppgift/:id/:editMode" component={createNewExercisePage}/>
+    <Route path="ny-uppgift/:id" component={createNewExercisePage}/>
 </Route>
   </Router>
 </Provider>, document.getElementById('root'));

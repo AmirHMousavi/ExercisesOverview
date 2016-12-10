@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import _ from 'lodash';
 
@@ -22,8 +22,8 @@ class Mening extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            sentence: '',
-            splitedSentenceArray: []
+            sentence:'',
+            splitedSentenceArray:[]
         }
         this.onChange = this.onChange.bind(this);
         this.onClick = this.onClick.bind(this);
@@ -72,7 +72,7 @@ class Mening extends Component {
                     <div className="col-xs-1">
                         <h3 style={{margin: 5 + 'px'}}>Mening</h3>
                     </div>
-                    <div className="col-xs-1 col-xs-offset-1">
+                    <div className="col-xs-1">
                         <button type="button" className="btn btn-primary" onClick={this.editSentence}>
                             <span className="glyphicon glyphicon-pencil"></span>
                         </button>
@@ -111,12 +111,7 @@ class Mening extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {sentence: state.sentence, splitedSentenceArray: state.splitedSentenceArray}
-}
-Mening.propTypes = {
-    sentence: React.PropTypes.string,
-    splitedSentenceArray: React.PropTypes.array
-}
 
-export default connect(mapStateToProps)(Mening);
+
+
+export default Mening;

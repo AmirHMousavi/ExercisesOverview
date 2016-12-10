@@ -42,7 +42,7 @@ class ExercisesOverviewList extends Component {
                         <td>{exercise.rightAnswersNumber + exercise.wrongAnswersNumber}</td>
                         <td>0 %</td>
                         <td>
-                            <Link to={`ny-uppgift/${theKey}/true`}>
+                            <Link to={`ny-uppgift/${theKey}`}>
                                 <button type="button" className="btn btn-primary">
                                     <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </button>

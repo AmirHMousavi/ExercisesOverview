@@ -5,7 +5,7 @@ import ExercisesOverviewList from './exercises-overview-list';
 import {fetchAllExercises} from '../actions/fetchAllExercises';
 
 class exercisesOverviewPage extends Component {
-    componentDidMount() {
+    componentWillMount() {
         this.props.fetchAllExercises();
     }
 
@@ -32,7 +32,7 @@ class exercisesOverviewPage extends Component {
                                 <span className="caret" style={{margin:5+'px'}}></span>
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><Link to="ny-uppgift/-1/false">Ny Ordklassar</Link></li>
+                                <li><Link to="ny-uppgift/-1">Ny Ordklassar</Link></li>
                                 <li className="disabled"><a href="#">another type1</a></li>
                                 <li className="disabled"><a href="#">another type 2</a></li>
                             </ul>

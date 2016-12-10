@@ -10,7 +10,7 @@ class Alternativ extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.props.getCategories();
     }
     categorySelected(category){
