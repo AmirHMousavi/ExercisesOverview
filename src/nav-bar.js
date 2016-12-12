@@ -3,16 +3,6 @@ import {Link} from 'react-router';
 
 class NavBar extends Component {
     render() {
-/*        const userLinks = (
-            <ul className="nav navbar-nav navbar-right">
-                <li>
-                    <Link to="/new-exercise">träning</Link>
-                </li>
-                <li>
-                    <a href="#">Logga ut</a>
-                </li>
-            </ul>
-        );*/
         const gustLinks = (
             <ul className="nav navbar-nav navbar-right">
                 <li>

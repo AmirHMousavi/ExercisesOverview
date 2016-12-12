@@ -4,11 +4,13 @@ import {connect} from 'react-redux';
 import Alternativ from './alternativ';
 import Mening from './mening';
 import {fetchOneExercise, dismissCurrentExercise} from '../../actions/fetchOneExercise';
+import {getCategories} from '../../actions/getCategories';
 
 class createNewExercisePage extends Component {
 
     componentWillMount() {
         this.props.fetchOneExercise(this.props.params.id);
+        this.props.getCategories();
     }
 
     
@@ -34,6 +36,7 @@ class createNewExercisePage extends Component {
     }
 
     render() {
+        const editeMode = !_.isEmpty(this.props.currentExercise);
         const editButton = (
             <button
                 type="button"
@@ -55,13 +58,13 @@ class createNewExercisePage extends Component {
                 <div className="container-fluid">
                     <form>
                         <Mening currentExercise={this.props.currentExercise}/>
-                        <Alternativ/>
+                        <Alternativ categories={this.props.categories}/>
                         <br/>
                         <div className="row">
                             <div className="col-xs-6">
 
                                 <div className="col-xs-2">
-                                    {this.props.params.id!=='-1'
+                                    {editeMode
                                         ? editButton
                                         : newButton}</div>
                                 <div className="col-xs-1 col-xs-offset-2">
@@ -77,15 +80,18 @@ class createNewExercisePage extends Component {
 }
 
 function mapStateToProps(state) {
-    return {currentExercise: state.currentExercise}
+    return {categories: state.categories,
+            currentExercise: state.currentExercise}
 }
 createNewExercisePage.propTypes = {
     fetchOneExercise: PropTypes.func.isRequired,
     dismissCurrentExercise: PropTypes.func.isRequired,
-    currentExercise: PropTypes.object.isRequired
+    currentExercise: PropTypes.object.isRequired,
+    categories: React.PropTypes.object.isRequired,
+    getCategories: React.PropTypes.func.isRequired
 }
 createNewExercisePage.contextTypes = {
     router: PropTypes.object
 }
 
-export default connect(mapStateToProps, {fetchOneExercise, dismissCurrentExercise})(createNewExercisePage);
+export default connect(mapStateToProps, {fetchOneExercise, dismissCurrentExercise,getCategories})(createNewExercisePage);

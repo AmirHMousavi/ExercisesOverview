@@ -1,6 +1,4 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {getCategories} from '../../actions/getCategories';
 
 class Alternativ extends Component {
     constructor(props){
@@ -10,9 +8,6 @@ class Alternativ extends Component {
         }
     }
 
-    componentWillMount() {
-        this.props.getCategories();
-    }
     categorySelected(category){
         console.log('selected -> ', category);
         this.setState({selectedCategory:category})
@@ -39,7 +34,10 @@ class Alternativ extends Component {
     render() {
         console.log('state selected', this.state.selectedCategory)
         return (
-            <div>
+            <div className="container">
+            <div className="row row-content">
+                
+            <div className="col-xs-12 col-sm-1">
                 <h3>Alternativ</h3>
             
             <div className="container">
@@ -49,19 +47,11 @@ class Alternativ extends Component {
                     </div>
                 </div>
             </div>
-            </div>
+            </div></div></div>
         );
     }
 }
 
-function mapStatetoProps(state) {
-    return {categories: state.categories,
-            selectedCategory:state.selectedCategory}
-}
-Alternativ.propType = {
-    selectedCategory:React.PropTypes.object.isRequired,
-    categories: React.PropTypes.object.isRequired,
-    getCategories: React.PropTypes.func.isRequired
-}
 
-export default connect(mapStatetoProps, {getCategories})(Alternativ);
+
+export default Alternativ

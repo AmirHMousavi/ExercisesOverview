@@ -11,10 +11,10 @@ class exercisesOverviewPage extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <h1>Översikt Övningar</h1>
-                <div className="row">
-                    <div className="col-sm-12">
+                <div className="row row-content">
+                    <div className="col-xs-12">
                         <div className="col-sm-4">
                             <div className="input-group">
                                 <span className="input-group-btn">
