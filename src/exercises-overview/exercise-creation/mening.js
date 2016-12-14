@@ -1,6 +1,9 @@
-import React, {Component} from 'react';
+import React, {Component,PropTypes} from 'react';
 import _ from 'lodash';
+import {connect} from 'react-redux'
 import classnames from 'classnames';
+import {selectWordIndex} from '../../actions/selectWordIndex';
+import {sentenceProvided} from '../../actions/sentenceProvided';
 
 class Mening extends Component {
     constructor(props) {
@@ -8,45 +11,29 @@ class Mening extends Component {
         this.state = {
             sentence: '',
             splitedSentenceArray: [],
-            selectedWordIndex: -1,
-            selectedWordColor:'',
             errors: {}
         }
-        this.onChange = this
-            .onChange
-            .bind(this);
-        this.splitSentence = this
-            .splitSentence
-            .bind(this);
-        this.onKeyPress = this
-            .onKeyPress
-            .bind(this);
-        this.editSentence = this
-            .editSentence
-            .bind(this);
-        this.selectWord = this
-            .selectWord
-            .bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.splitSentence = this.splitSentence.bind(this);
+        this.onKeyPress = this.onKeyPress.bind(this);
+        this.editSentence = this.editSentence.bind(this);
+        this.selectWord = this.selectWord.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        if (!_.isEmpty(nextProps.currentExercise)) {
-            let currentExercise=nextProps.currentExercise
+        let currentExercise=this.props.currentExercise
+        if (currentExercise!==nextProps.currentExercise) {
+            currentExercise=nextProps.currentExercise
+            this.props.sentenceProvided(currentExercise.sentence);
             this.setState({
                 splitedSentenceArray:currentExercise
                     .sentence
                     .split(" ")
             })
             var index=currentExercise.solutionGroups[0].groupParts[0].selectedWordIndex;
-            var color=currentExercise.solutionGroups[0].category.color;
-            this.paintTheWord(index,color);
+            this.props.selectWordIndex(index);
         }
     }
-    paintTheWord(index,color){
-        console.log('index&color ->',index,color)
-        this.setState({selectedWordIndex:index});
-        this.setState({selectedWordColor:color});
-        
-    }
+
 
     onKeyPress(e) {
         if (e.key === 'Enter') {
@@ -67,18 +54,15 @@ class Mening extends Component {
             this.setState({errors})
         } else {
             this.setState({errors})
-            var arr = this
-                .state
-                .sentence
-                .split(" ");
+            var trimedSentence=this.state.sentence.trim();
+            var arr = trimedSentence.split(" ");
             this.setState({sentence: ''});
             this.setState({splitedSentenceArray: arr});
+            this.props.sentenceProvided(this.state.sentence);
         }
     }
     selectWord(e) {
-        this.setState({selectedWordIndex: e.target.value});
-        e.target
-
+        this.props.selectWordIndex(parseInt(e.target.value,[10]));
     }
     mapSentenceArrToButtonGroup() {
         var counter = -1;
@@ -93,8 +77,8 @@ class Mening extends Component {
                         type="button"
                         className="btn btn-default"
                         value={counter}
-                        style={this.state.selectedWordIndex === counter ? 
-                        { color:this.state.selectedWordColor } : {}}
+                        style={this.props.index === counter ? 
+                        { color:this.props.color } : {}}
                         onClick={this.selectWord}>{word}</button>
                 );
             });
@@ -110,8 +94,6 @@ class Mening extends Component {
     }
 
     render() {
-        console.log('selectedWordIndex->', this.state.selectedWordIndex)
-        console.log('from paint ->',this.state.selectedWordIndex,' & ',this.state.selectedWordColor);
         const {errors} = this.state;
         return (
             <div className="container">
@@ -157,5 +139,17 @@ class Mening extends Component {
         );
     }
 }
+function mapStateToProps(state){
+    return{
+        index:state.selectedWordIndex.selectedWordIndex,
+        color:state.selectedCategory.color,
+        selectedWordIndex:state.selectedWordIndex,
+        currentExercise:state.currentExercise
+    }
+}
+Mening.propTypes={
+    selectedWordIndex:PropTypes.object,
+    sentenceProvided:PropTypes.func.isRequired
+}
 
-export default Mening;
+export default connect(mapStateToProps,{selectWordIndex,sentenceProvided})(Mening);

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
-import {deleteOneExercise} from '../actions/deleteOneExercise';
+import {deleteOneExercise} from '../actions/fetchOneExercise';
 
 class ExercisesOverviewList extends Component {
     checkExeType(type){

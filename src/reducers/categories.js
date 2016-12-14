@@ -1,17 +1,15 @@
-import {GET_CATEGORIES} from '../actions/types';
+import {FETCH_ALL_CATEGORIES} from '../actions/types';
 import _ from 'lodash';
 
 export default function categories(state = {}, action) {
     switch (action.type) {
-        case GET_CATEGORIES:
+        case FETCH_ALL_CATEGORIES:
             const categoryList = action.categoryList;
-            return {...state,...categoryList};
+            return {
+                ...state,
+                ...categoryList
+            };
         default:
             return state;
     }
 }
-
-            /*      case FETCH_EXERCISE:
-        return {...sate, [action.exercises.id]:action.exercises};
-        case UPDATE_EXERCISE:
-        return {...state,[action.exercises.id]:action.exercises};  */

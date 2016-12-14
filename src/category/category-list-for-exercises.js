@@ -1,36 +1,3 @@
-class Category {
-  constructor(value, color) {
-    this._value = value;
-    this._color = color;
-  }
-  displayValue() {
-    return this._value;
-  }
-  get color() {
-    return this._color;
-  }
-  set color(value) {
-    this._color = value;
-  }
-  equals(other) {
-    return (this._value === other._value) && (this._color === other._color);
-  }
-}
-
-class CategoryList {
-
-  constructor(categories) {
-    this._categories = categories;
-  }
-
-  get categories() {
-    return this._categories;
-  }
-
-  set categories(value) {
-    this._categories = value;
-  }
-}
 
 let RED = 'rgb(252,0,8)';
 let ORANGE = 'rgb(253,134,63)';
@@ -44,15 +11,15 @@ let GRAY = 'rgb(109,109,109)';
 let PINK = 'rgb(252,0,255)';
 
 
-export const PARTS_OF_SPEECH_CATEGORY_LIST = new CategoryList([
-  new Category('substantiv', RED),
-  new Category('verb', ORANGE),
-  new Category('adjektiv', LIME),
-  new Category('pronomen', GREEN),
-  new Category('adverb', BLUE),
-  new Category('preposition', LIGHT_BLUE),
-  new Category('räkneord', BROWN),
-  new Category('konjunktion', LIGHT_PINK),
-  new Category('subjunktion', GRAY),
-  new Category('interjektion', PINK),
-]);
+export const PARTS_OF_SPEECH_CATEGORY_LIST = [
+  {value:'substantiv', color:RED},
+  {value:'verb', color:ORANGE},
+  {value:'adjektiv', color:LIME},
+  {value:'pronomen', color:GREEN},
+  {value:'adverb', color:BLUE},
+  {value:'preposition', color:LIGHT_BLUE},
+  {value:'räkneord', color:BROWN},
+  {value:'konjunktion', color:LIGHT_PINK},
+  {value:'subjunktion', color:GRAY},
+  {value:'interjektion', color:PINK},
+];

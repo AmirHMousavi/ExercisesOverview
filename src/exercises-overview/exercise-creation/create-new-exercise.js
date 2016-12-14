@@ -4,18 +4,25 @@ import {connect} from 'react-redux';
 import Alternativ from './alternativ';
 import Mening from './mening';
 import {fetchOneExercise, dismissCurrentExercise} from '../../actions/fetchOneExercise';
-import {getCategories} from '../../actions/getCategories';
+import {fetchAllCategories} from '../../actions/fetchAllCategories';
+import { selectCategory,dismissSelectedCategory} from '../../actions/selectCategory';
+import { selectWordIndex,dismissSelectedWordIndex} from '../../actions/selectWordIndex';
+import {updateCurrentSentence,updateCurrentWordIndex,updateCurrentCategory} from '../../actions/updateCurrentExersice'
 
 class createNewExercisePage extends Component {
 
-    componentWillMount() {
-        this.props.fetchOneExercise(this.props.params.id);
-        this.props.getCategories();
+    componentDidMount() {
+        var id = this.props.params.id;
+        if (id !== '-1') {
+            this.props.fetchOneExercise(id)
+        }
     }
 
-    
     constructor(props) {
         super(props);
+        this.state = {
+            invalidYet: true
+        }
         this.editExerciseAndBack = this
             .editExerciseAndBack
             .bind(this);
@@ -23,16 +30,26 @@ class createNewExercisePage extends Component {
             .goBack
             .bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        if(!_.isEmpty(this.props.currentExercise)){
+        if(nextProps.providedSentence!==this.props.currentExercise.sentence){
+            this.props.updateCurrentSentence(nextProps.providedSentence)
+        }
+        if(nextProps.selectedWordIndex.selectedWordIndex!==this.props.currentExercise.solutionGroups[0].groupParts[0].selectedWordIndex){
+            this.props.updateCurrentWordIndex(nextProps.selectedWordIndex.selectedWordIndex)
+        }
+        if(nextProps.selectedCategory!==this.props.currentExercise.solutionGroups[0].category){
+            this.props.updateCurrentCategory(nextProps.selectedCategory)
+        }
+}
+    }
     editExerciseAndBack() {}
     saveAndNewExercise() {}
     goBack() {
-        this
-            .props
-            .dismissCurrentExercise();
-        this
-            .context
-            .router
-            .push("/exercises-overview")
+        this.props.dismissCurrentExercise();
+        this.props.dismissSelectedCategory();
+        this.props.dismissSelectedWordIndex();
+        this.context.router.push("/exercises-overview");
     }
 
     render() {
@@ -41,14 +58,16 @@ class createNewExercisePage extends Component {
             <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.editExerciseAndBack}>Uppdatera & Tillbaka
+                onClick={this.editExerciseAndBack}
+                disabled={this.state.invalidYet}>Uppdatera & Tillbaka
             </button>
         )
         const newButton = (
             <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.saveAndNewExercise()}>Spara & Ny Ordklasser
+                onClick={this.saveAndNewExercise()}
+                disabled={this.state.invalidYet}>Spara & Ny Ordklasser
             </button>
         )
         return (
@@ -57,8 +76,8 @@ class createNewExercisePage extends Component {
                 <hr/>
                 <div className="container-fluid">
                     <form>
-                        <Mening currentExercise={this.props.currentExercise}/>
-                        <Alternativ categories={this.props.categories}/>
+                        <Mening/>
+                        <Alternativ/>
                         <br/>
                         <div className="row">
                             <div className="col-xs-6">
@@ -80,18 +99,45 @@ class createNewExercisePage extends Component {
 }
 
 function mapStateToProps(state) {
-    return {categories: state.categories,
-            currentExercise: state.currentExercise}
+    return {
+        categories: state.categories, 
+        currentExercise: state.currentExercise,
+        selectedCategory: state.selectedCategory,
+        selectedWordIndex: state.selectedWordIndex,
+        providedSentence: state.providedSentence
+    }
 }
 createNewExercisePage.propTypes = {
-    fetchOneExercise: PropTypes.func.isRequired,
-    dismissCurrentExercise: PropTypes.func.isRequired,
     currentExercise: PropTypes.object.isRequired,
-    categories: React.PropTypes.object.isRequired,
-    getCategories: React.PropTypes.func.isRequired
+    categories: PropTypes.object.isRequired,
+    selectedCategory:PropTypes.object.isRequired,
+    selectedWordIndex:PropTypes.object.isRequired,
+    providedSentence:PropTypes.object.isRequired,
+    /*-------------------------------------------*/
+    dismissSelectedWordIndex: PropTypes.func.isRequired,
+    dismissSelectedCategory: PropTypes.func.isRequired,
+    selectWordIndex: PropTypes.func.isRequired,
+    selectCategory:PropTypes.func.isRequired,
+    fetchOneExercise: PropTypes.func.isRequired,
+    fetchAllCategories: PropTypes.func.isRequired,
+    dismissCurrentExercise: PropTypes.func.isRequired,
+    updateCurrentSentence: PropTypes.func.isRequired,
+    updateCurrentWordIndex: PropTypes.func.isRequired,
+    updateCurrentCategory: PropTypes.func.isRequired
+    
 }
 createNewExercisePage.contextTypes = {
     router: PropTypes.object
 }
 
-export default connect(mapStateToProps, {fetchOneExercise, dismissCurrentExercise,getCategories})(createNewExercisePage);
+export default connect(mapStateToProps, {
+    fetchOneExercise, 
+    dismissCurrentExercise, 
+    fetchAllCategories, 
+    dismissSelectedCategory, 
+    dismissSelectedWordIndex,
+    selectCategory,
+    selectWordIndex,
+    updateCurrentSentence,
+    updateCurrentWordIndex,
+    updateCurrentCategory})(createNewExercisePage);
