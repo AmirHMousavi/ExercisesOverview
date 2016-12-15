@@ -5,50 +5,49 @@ import Alternativ from './alternativ';
 import Mening from './mening';
 import {fetchOneExercise, dismissCurrentExercise} from '../../actions/fetchOneExercise';
 import {fetchAllCategories} from '../../actions/fetchAllCategories';
-import { selectCategory,dismissSelectedCategory} from '../../actions/selectCategory';
-import { selectWordIndex,dismissSelectedWordIndex} from '../../actions/selectWordIndex';
-import {updateCurrentSentence,updateCurrentWordIndex,updateCurrentCategory} from '../../actions/updateCurrentExersice'
+import {selectCategory, dismissSelectedCategory} from '../../actions/selectCategory';
+import {selectWordIndex, dismissSelectedWordIndex} from '../../actions/selectWordIndex';
+import {updateCurrentSentence, updateCurrentWordIndex, updateCurrentCategory} from '../../actions/updateCurrentExersice';
+import {dismissProvidedSentence} from '../../actions/sentenceProvided';
 
 class createNewExercisePage extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoading: false,
+            invalid: true
+        }
+        this.editExerciseAndBack = this.editExerciseAndBack.bind(this);
+        this.saveAndNewExercise = this.saveAndNewExercise.bind(this);
+        this.goBack = this.goBack.bind(this);
+    }
     componentDidMount() {
         var id = this.props.params.id;
         if (id !== '-1') {
             this.props.fetchOneExercise(id)
         }
     }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            invalidYet: true
-        }
-        this.editExerciseAndBack = this
-            .editExerciseAndBack
-            .bind(this);
-        this.goBack = this
-            .goBack
-            .bind(this);
-    }
     componentWillReceiveProps(nextProps) {
-        if(!_.isEmpty(this.props.currentExercise)){
-        if(nextProps.providedSentence!==this.props.currentExercise.sentence){
-            this.props.updateCurrentSentence(nextProps.providedSentence)
+        if(!_.isEmpty(nextProps.selectedCategory||nextProps.selectedWordIndex||nextProps.providedSentence)){
+            this.setState({invalid:false})
         }
-        if(nextProps.selectedWordIndex.selectedWordIndex!==this.props.currentExercise.solutionGroups[0].groupParts[0].selectedWordIndex){
-            this.props.updateCurrentWordIndex(nextProps.selectedWordIndex.selectedWordIndex)
-        }
-        if(nextProps.selectedCategory!==this.props.currentExercise.solutionGroups[0].category){
-            this.props.updateCurrentCategory(nextProps.selectedCategory)
-        }
-}
     }
-    editExerciseAndBack() {}
-    saveAndNewExercise() {}
+    editExerciseAndBack() {
+        this.setState({isLoading:true});
+        let{providedSentence,selectedCategory,selectedWordIndex}=this.props;
+        this.props.updateCurrentSentence(providedSentence);
+        this.props.updateCurrentWordIndex(selectedWordIndex.selectedWordIndex);
+        this.props.updateCurrentCategory(selectedCategory);
+    }
+    saveAndNewExercise() {
+        this.setState({isLoading:true})
+    }
     goBack() {
         this.props.dismissCurrentExercise();
         this.props.dismissSelectedCategory();
         this.props.dismissSelectedWordIndex();
+        this.props.dismissProvidedSentence();
         this.context.router.push("/exercises-overview");
     }
 
@@ -59,15 +58,15 @@ class createNewExercisePage extends Component {
                 type="button"
                 className="btn btn-success"
                 onClick={this.editExerciseAndBack}
-                disabled={this.state.invalidYet}>Uppdatera & Tillbaka
+                disabled={this.state.isLoading || this.state.invalid}>Uppdatera & Tillbaka
             </button>
         )
         const newButton = (
             <button
                 type="button"
                 className="btn btn-success"
-                onClick={this.saveAndNewExercise()}
-                disabled={this.state.invalidYet}>Spara & Ny Ordklasser
+                onClick={this.saveAndNewExercise}
+                disabled={this.state.isLoading || this.state.invalid}>Spara & Ny Ordklasser
             </button>
         )
         return (
@@ -75,7 +74,6 @@ class createNewExercisePage extends Component {
                 <h1>Redigera Ordklasser</h1>
                 <hr/>
                 <div className="container-fluid">
-                    <form>
                         <Mening/>
                         <Alternativ/>
                         <br/>
@@ -91,7 +89,6 @@ class createNewExercisePage extends Component {
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </div>
             </div>
         );
@@ -99,45 +96,42 @@ class createNewExercisePage extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-        categories: state.categories, 
-        currentExercise: state.currentExercise,
-        selectedCategory: state.selectedCategory,
-        selectedWordIndex: state.selectedWordIndex,
-        providedSentence: state.providedSentence
-    }
+    return {categories: state.categories, currentExercise: state.currentExercise, selectedCategory: state.selectedCategory, selectedWordIndex: state.selectedWordIndex, providedSentence: state.providedSentence}
 }
 createNewExercisePage.propTypes = {
     currentExercise: PropTypes.object.isRequired,
     categories: PropTypes.object.isRequired,
-    selectedCategory:PropTypes.object.isRequired,
-    selectedWordIndex:PropTypes.object.isRequired,
-    providedSentence:PropTypes.object.isRequired,
+    selectedCategory: PropTypes.object.isRequired,
+    selectedWordIndex: PropTypes.object.isRequired,
+    providedSentence: PropTypes.object.isRequired,
     /*-------------------------------------------*/
     dismissSelectedWordIndex: PropTypes.func.isRequired,
     dismissSelectedCategory: PropTypes.func.isRequired,
     selectWordIndex: PropTypes.func.isRequired,
-    selectCategory:PropTypes.func.isRequired,
+    selectCategory: PropTypes.func.isRequired,
     fetchOneExercise: PropTypes.func.isRequired,
     fetchAllCategories: PropTypes.func.isRequired,
     dismissCurrentExercise: PropTypes.func.isRequired,
     updateCurrentSentence: PropTypes.func.isRequired,
     updateCurrentWordIndex: PropTypes.func.isRequired,
-    updateCurrentCategory: PropTypes.func.isRequired
-    
+    updateCurrentCategory: PropTypes.func.isRequired,
+    dismissProvidedSentence: PropTypes.func.isRequired
+
 }
 createNewExercisePage.contextTypes = {
     router: PropTypes.object
 }
 
 export default connect(mapStateToProps, {
-    fetchOneExercise, 
-    dismissCurrentExercise, 
-    fetchAllCategories, 
-    dismissSelectedCategory, 
+    fetchOneExercise,
+    dismissCurrentExercise,
+    fetchAllCategories,
+    dismissSelectedCategory,
     dismissSelectedWordIndex,
+    dismissProvidedSentence,
     selectCategory,
     selectWordIndex,
     updateCurrentSentence,
     updateCurrentWordIndex,
-    updateCurrentCategory})(createNewExercisePage);
+    updateCurrentCategory
+})(createNewExercisePage);

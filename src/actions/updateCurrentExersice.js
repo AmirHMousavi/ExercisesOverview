@@ -16,6 +16,12 @@ export function updateCurrentCategory(category) {
     }
 }
 
+export function updateCurrentExercise(currentExercise){
+    return dispatch=>{
+        dispatch(current)
+    }
+}
+
 export function currentCategoryUpdated(category) {return{type:CURRENT_CATEGORY_UPDATED,category}}
 export function currentSentenceUpdated(sentence) {return{type:CURRENT_SENTENCE_UPDATED,sentence}}
 export function currentWordIndexUpdated(index) {return{type:CURRENT_WORD_INDEX_UPDATED,index}}

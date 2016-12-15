@@ -1,24 +1,56 @@
-import {FETCH_ONE_EXERCISE, DISMISS_CURRENT_EXERCISE,CURRENT_CATEGORY_UPDATED, CURRENT_SENTENCE_UPDATED, CURRENT_WORD_INDEX_UPDATED} from '../actions/types';
+import * as types from '../actions/types';
 import _ from 'lodash';
+import update from 'immutability-helper';
 
 export default function currentExercise(state = {}, action) {
     switch (action.type) {
-        case FETCH_ONE_EXERCISE:
+        case types.FETCH_ONE_EXERCISE:
             const currentExercise = action.currentExercise;
             return {
                 ...currentExercise
             };
-        case DISMISS_CURRENT_EXERCISE:
+        case types.DISMISS_CURRENT_EXERCISE:
             return {};
-        case CURRENT_CATEGORY_UPDATED:
-            const category=action.category
-            return{...state,...category}
-        case CURRENT_SENTENCE_UPDATED:
-            const sentence=action.sentence
-            return{...state,...sentence}
-        case CURRENT_WORD_INDEX_UPDATED:
-            const selectedWordIndex=action.selectedWordIndex
-            return{...state,...selectedWordIndex}
+        case types.CURRENT_CATEGORY_UPDATED:
+            const color = action.category.color
+            const value = action.category.value
+            /*return{...state,value:{...state.solutionGroups[0].category.value}}*/
+            return update(state, {
+                solutionGroups: {
+                    0: {
+                        category: {
+                            value: {
+                                $set: value
+                            },
+                            color: {
+                                $set: color
+                            }
+                        }
+                    }
+                }
+            })
+        case types.CURRENT_SENTENCE_UPDATED:
+            const sentence = action.sentence
+            return {
+                ...state,
+                ...sentence
+            }
+        case types.CURRENT_WORD_INDEX_UPDATED:
+            const index = action.index
+            return update(state,{
+                solutionGroups:{
+                    0:{
+                        groupParts:{
+                            0:{
+                                selectedWordIndex:{
+                                    $set: index
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+            
         default:
             return state;
     }

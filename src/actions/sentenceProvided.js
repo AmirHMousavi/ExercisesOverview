@@ -1,7 +1,6 @@
 import {SENTENCE_PROVIDED,DISMISS_PROVIDED_SENTENCE} from './types';
 
 export function setProvidedSentence(sentence) {
-    console.log('from action->',sentence)
     return {type: SENTENCE_PROVIDED, sentence}
     
 }
