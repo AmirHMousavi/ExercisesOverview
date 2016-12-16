@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {Link} from 'react-router';
 import {connect} from 'react-redux';
 import {deleteOneExercise} from '../actions/fetchOneExercise';
+import {setEditeMode} from '../actions/mode';
 
 class ExercisesOverviewList extends Component {
     checkExeType(type){
@@ -20,6 +21,10 @@ class ExercisesOverviewList extends Component {
         var slice2=splitedSentece.slice(index,index+1);
         var slice3=splitedSentece.slice(index+1,splitedSentece.length);
         return [slice1.join(" "),slice2.join(" "),slice3.join(" ")];    
+}
+setEditeMode(e){
+    console.log('pencile clicked',e.target)
+    this.props.setEditeMode(true);
 }
 
     renderExercises() {
@@ -43,7 +48,7 @@ class ExercisesOverviewList extends Component {
                         <td>0 %</td>
                         <td>
                             <Link to={`ny-uppgift/${theKey}`}>
-                                <button type="button" className="btn btn-primary">
+                                <button type="button" className="btn btn-primary" onClick={this.setEditeMode.bind(this)}>
                                     <span className="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </button>
                             </Link>
@@ -86,13 +91,14 @@ class ExercisesOverviewList extends Component {
 
 //introduce new props to this component
 function mapStateToProps(state) {
-    return {exercises: state.exercises}
+    return {exercises: state.exercises,mode:state.mode}
 }
 //as we intoduce new props, lets document it in proptypes
 ExercisesOverviewList.propTypes = {
-    exercises: React.PropTypes.object.isRequired,
-    deleteOneExercise: React.PropTypes.func.isRequired
+    exercises: PropTypes.object.isRequired,
+    deleteOneExercise: PropTypes.func.isRequired,
+    setEditeMode: PropTypes.func.isRequired
 }
 
 
-export default connect(mapStateToProps,{deleteOneExercise})(ExercisesOverviewList);
+export default connect(mapStateToProps,{deleteOneExercise,setEditeMode})(ExercisesOverviewList);

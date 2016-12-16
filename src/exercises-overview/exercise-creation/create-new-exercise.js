@@ -7,7 +7,7 @@ import {fetchOneExercise, dismissCurrentExercise} from '../../actions/fetchOneEx
 import {fetchAllCategories} from '../../actions/fetchAllCategories';
 import {selectCategory, dismissSelectedCategory} from '../../actions/selectCategory';
 import {selectWordIndex, dismissSelectedWordIndex} from '../../actions/selectWordIndex';
-import {updateCurrentSentence, updateCurrentWordIndex, updateCurrentCategory} from '../../actions/updateCurrentExersice';
+import {updateCurrentSentence, updateCurrentWordIndex, updateCurrentCategory,updateCurrentExercise} from '../../actions/updateCurrentExersice';
 import {dismissProvidedSentence} from '../../actions/sentenceProvided';
 
 class createNewExercisePage extends Component {
@@ -15,8 +15,7 @@ class createNewExercisePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false,
-            invalid: true
+            invalid: false
         }
         this.editExerciseAndBack = this.editExerciseAndBack.bind(this);
         this.saveAndNewExercise = this.saveAndNewExercise.bind(this);
@@ -29,20 +28,25 @@ class createNewExercisePage extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if(!_.isEmpty(nextProps.selectedCategory||nextProps.selectedWordIndex||nextProps.providedSentence)){
-            this.setState({invalid:false})
+        if(this.props.selectedCategory!==nextProps.selectedCategory){
+            this.props.updateCurrentCategory(nextProps.selectedCategory);
+        }
+        if(this.props.providedSentence!==nextProps.providedSentence){
+            this.props.updateCurrentSentence(nextProps.providedSentence.sentence);
+        }
+        if(this.props.selectedWordIndex!==nextProps.selectedWordIndex){
+           this.props.updateCurrentWordIndex(nextProps.selectedWordIndex.selectedWordIndex);
         }
     }
-    editExerciseAndBack() {
-        this.setState({isLoading:true});
-        let{providedSentence,selectedCategory,selectedWordIndex}=this.props;
-        this.props.updateCurrentSentence(providedSentence);
-        this.props.updateCurrentWordIndex(selectedWordIndex.selectedWordIndex);
-        this.props.updateCurrentCategory(selectedCategory);
+    editExerciseAndBack(){
+        this.setState({isLoading:true}); 
+        this.props.updateCurrentExercise(this.props.currentExercise);
+        this.goBack()
     }
     saveAndNewExercise() {
         this.setState({isLoading:true})
     }
+
     goBack() {
         this.props.dismissCurrentExercise();
         this.props.dismissSelectedCategory();
@@ -52,13 +56,14 @@ class createNewExercisePage extends Component {
     }
 
     render() {
-        const editeMode = !_.isEmpty(this.props.currentExercise);
+        let {editeMode} = this.props.mode;
+        console.log('editemode ->',editeMode);
         const editButton = (
             <button
                 type="button"
                 className="btn btn-success"
                 onClick={this.editExerciseAndBack}
-                disabled={this.state.isLoading || this.state.invalid}>Uppdatera & Tillbaka
+                disabled={ this.state.invalid}>Uppdatera & Tillbaka
             </button>
         )
         const newButton = (
@@ -66,7 +71,7 @@ class createNewExercisePage extends Component {
                 type="button"
                 className="btn btn-success"
                 onClick={this.saveAndNewExercise}
-                disabled={this.state.isLoading || this.state.invalid}>Spara & Ny Ordklasser
+                disabled={ this.state.invalid}>Spara & Ny Ordklasser
             </button>
         )
         return (
@@ -74,8 +79,8 @@ class createNewExercisePage extends Component {
                 <h1>Redigera Ordklasser</h1>
                 <hr/>
                 <div className="container-fluid">
-                        <Mening/>
-                        <Alternativ/>
+                        <Mening invalid={this.state.invalid}/>
+                        <Alternativ invalid={this.state.invalid}/>
                         <br/>
                         <div className="row">
                             <div className="col-xs-6">
@@ -96,7 +101,7 @@ class createNewExercisePage extends Component {
 }
 
 function mapStateToProps(state) {
-    return {categories: state.categories, currentExercise: state.currentExercise, selectedCategory: state.selectedCategory, selectedWordIndex: state.selectedWordIndex, providedSentence: state.providedSentence}
+    return {categories: state.categories, currentExercise: state.currentExercise, selectedCategory: state.selectedCategory, selectedWordIndex: state.selectedWordIndex, providedSentence: state.providedSentence, mode:state.mode}
 }
 createNewExercisePage.propTypes = {
     currentExercise: PropTypes.object.isRequired,
@@ -115,7 +120,8 @@ createNewExercisePage.propTypes = {
     updateCurrentSentence: PropTypes.func.isRequired,
     updateCurrentWordIndex: PropTypes.func.isRequired,
     updateCurrentCategory: PropTypes.func.isRequired,
-    dismissProvidedSentence: PropTypes.func.isRequired
+    dismissProvidedSentence: PropTypes.func.isRequired,
+    updateCurrentExercise: PropTypes.func.isRequired
 
 }
 createNewExercisePage.contextTypes = {
@@ -133,5 +139,6 @@ export default connect(mapStateToProps, {
     selectWordIndex,
     updateCurrentSentence,
     updateCurrentWordIndex,
-    updateCurrentCategory
+    updateCurrentCategory,
+    updateCurrentExercise
 })(createNewExercisePage);

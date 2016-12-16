@@ -2,13 +2,36 @@ import * as types from '../actions/types';
 import _ from 'lodash';
 import update from 'immutability-helper';
 
-export default function currentExercise(state = {}, action) {
+let initialState={
+        id: '',
+    question: 'Bestäm det markerade ord.',
+    sentence: '',
+    exerciseType: 'PART_OF_SPEECH',
+    rightAnswersNumber: 0,
+    wrongAnswersNumber: 0,
+    solutionGroups: [
+      {
+        id:'',
+        category: {
+          id: '',
+          value: '',
+          color: ''
+        },
+        groupParts: [
+          {
+            id: '',
+            selectedWordIndex: ''
+          }
+        ]
+      }
+    ]
+}
+
+export default function currentExercise(state = initialState, action) {
     switch (action.type) {
         case types.FETCH_ONE_EXERCISE:
             const currentExercise = action.currentExercise;
-            return {
-                ...currentExercise
-            };
+            return {...state,...currentExercise};
         case types.DISMISS_CURRENT_EXERCISE:
             return {};
         case types.CURRENT_CATEGORY_UPDATED:
@@ -31,10 +54,11 @@ export default function currentExercise(state = {}, action) {
             })
         case types.CURRENT_SENTENCE_UPDATED:
             const sentence = action.sentence
-            return {
-                ...state,
-                ...sentence
-            }
+            return update(state,{
+                sentence:{
+                    $set:sentence
+                }
+            })
         case types.CURRENT_WORD_INDEX_UPDATED:
             const index = action.index
             return update(state,{

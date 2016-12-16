@@ -1,4 +1,6 @@
+import axios from 'axios';
 import {CURRENT_CATEGORY_UPDATED, CURRENT_SENTENCE_UPDATED, CURRENT_WORD_INDEX_UPDATED} from './types';
+import {divideExercisePartFrom,divideSolutionPartFrom} from '../assets/exercisePartsDivider';
 
 export function updateCurrentSentence(sentence) {
     return dispatch => {
@@ -17,8 +19,12 @@ export function updateCurrentCategory(category) {
 }
 
 export function updateCurrentExercise(currentExercise){
-    return dispatch=>{
-        dispatch(current)
+    let exercisePart=divideExercisePartFrom(currentExercise);
+    let solutionPart=divideSolutionPartFrom(currentExercise);
+    return dispatch=>{axios.put(`http://localhost:8080/exercises/${currentExercise.id}`,exercisePart)
+    .then(res=>{
+    })
+        dispatch()
     }
 }
 

@@ -5,5 +5,6 @@ import currentExercise from './reducers/currentExercise';
 import selectedCategory from './reducers/selectedCategory';
 import selectedWordIndex from './reducers/selectedWordIndex';
 import providedSentence from './reducers/providedSentence';
+import mode from './reducers/mode';
 
-export default combineReducers({exercises, categories, currentExercise, selectedCategory, selectedWordIndex,providedSentence});
+export default combineReducers({exercises, categories, currentExercise, selectedCategory, selectedWordIndex,providedSentence,mode});

@@ -5,7 +5,7 @@ export function setProvidedSentence(sentence) {
     
 }
 export function dismiss() {
-    return {type: DISMISS_PROVIDED_SENTENCE}
+    return {type: DISMISS_PROVIDED_SENTENCE,sentence:''}
 }
 
 export function sentenceProvided(sentence) {

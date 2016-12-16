@@ -2,8 +2,9 @@ import React, {Component,PropTypes} from 'react';
 import _ from 'lodash';
 import {connect} from 'react-redux'
 import classnames from 'classnames';
-import {selectWordIndex} from '../../actions/selectWordIndex';
-import {sentenceProvided} from '../../actions/sentenceProvided';
+import {selectWordIndex,dismissSelectedWordIndex} from '../../actions/selectWordIndex';
+import {sentenceProvided,dismissProvidedSentence} from '../../actions/sentenceProvided';
+import {dismissSelectedCategory} from '../../actions/selectCategory';
 
 class Mening extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class Mening extends Component {
             this.props.sentenceProvided(currentExercise.sentence);
             this.setState({
                 splitedSentenceArray:currentExercise
-                    .sentence
+                    .sentence.trim()
                     .split(" ")
             })
             var index=currentExercise.solutionGroups[0].groupParts[0].selectedWordIndex;
@@ -84,6 +85,9 @@ class Mening extends Component {
             });
     }
     editSentence() {
+        this.props.dismissProvidedSentence();
+        this.props.dismissSelectedWordIndex();
+        this.props.dismissSelectedCategory();
         this.setState({
             sentence: this
                 .state
@@ -92,6 +96,7 @@ class Mening extends Component {
         });
         this.setState({splitedSentenceArray: []});
     }
+
 
     render() {
         const {errors} = this.state;
@@ -144,12 +149,16 @@ function mapStateToProps(state){
         index:state.selectedWordIndex.selectedWordIndex,
         color:state.selectedCategory.color,
         selectedWordIndex:state.selectedWordIndex,
-        currentExercise:state.currentExercise
+        currentExercise:state.currentExercise,
+        providedSentence:state.providedSentence
     }
 }
 Mening.propTypes={
     selectedWordIndex:PropTypes.object,
-    sentenceProvided:PropTypes.func.isRequired
+    sentenceProvided:PropTypes.func.isRequired,
+    dismissSelectedWordIndex:PropTypes.func.isRequired,
+    dismissProvidedSentence:PropTypes.func.isRequired,
+    dismissSelectedCategory:PropTypes.func.isRequired
 }
 
-export default connect(mapStateToProps,{selectWordIndex,sentenceProvided})(Mening);
+export default connect(mapStateToProps,{selectWordIndex,sentenceProvided,dismissSelectedWordIndex,dismissProvidedSentence,dismissSelectedCategory})(Mening);

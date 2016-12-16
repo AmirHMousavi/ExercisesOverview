@@ -1,12 +1,16 @@
-import React, {Component} from 'react';
+import React, {Component,PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import ExercisesOverviewList from './exercises-overview-list';
 import {fetchAllExercises} from '../actions/fetchAllExercises';
+import {setEditeMode} from '../actions/mode';
 
 class exercisesOverviewPage extends Component {
     componentWillMount() {
         this.props.fetchAllExercises();
+    }
+    setEditeMode(){
+        this.props.setEditeMode(false);
     }
 
     render() {
@@ -28,11 +32,11 @@ class exercisesOverviewPage extends Component {
                         <div className="col-sm-1 col-sm-offset-6">
                             <div className="dropdown">
                             <button className="btn btn-success dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                Ny Ordklassar
+                                Ny uppgift
                                 <span className="caret" style={{margin:5+'px'}}></span>
                             </button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                <li><Link to="ny-uppgift/-1">Ny Ordklassar</Link></li>
+                                <li><Link to="ny-uppgift/-1" onClick={this.setEditeMode.bind(this)}>Ny Ordklassar</Link></li>
                                 <li className="disabled"><a href="#">another type1</a></li>
                                 <li className="disabled"><a href="#">another type 2</a></li>
                             </ul>
@@ -50,7 +54,9 @@ class exercisesOverviewPage extends Component {
 
 //as we intoduce new props, lets document it in proptypes
 exercisesOverviewPage.propTypes = {
-    fetchAllExercises: React.PropTypes.func.isRequired
+    fetchAllExercises: PropTypes.func.isRequired,
+    setEditeMode: PropTypes.func.isRequired
+
 }
 
-export default connect(null,{fetchAllExercises})(exercisesOverviewPage);
+export default connect(null,{fetchAllExercises,setEditeMode})(exercisesOverviewPage);
